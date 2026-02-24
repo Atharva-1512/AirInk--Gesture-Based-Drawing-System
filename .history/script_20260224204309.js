@@ -58,23 +58,13 @@ hands.onResults(results => {
     // =====================
     // 🖐 PALM → CLEAR SCREEN
     // =====================
-    // 🖐 OPEN PALM → CLEAR CANVAS
-if(index && middle && ring && pinky){
-
-    // small delay protection (prevents repeated clearing)
-    if(!window.palmDetected){
+    if(thumb && index && middle && ring && pinky){
         ctx.clearRect(0,0,canvas.width,canvas.height);
         drawing=false;
         lastX=null;
         lastY=null;
-
-        window.palmDetected = true;
+        return;
     }
-
-    return;
-} else {
-    window.palmDetected = false;
-}
 
     // =====================
     // ☝️ DRAW

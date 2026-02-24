@@ -22,24 +22,23 @@ hands.setOptions({
 });
 
 // =====================
-// Finger Helpers
+// Finger Detection Helpers
 // =====================
 
 function fingerUp(tip, pip, lm){
   return lm[tip].y < lm[pip].y;
 }
 
-// Thumb works differently (x direction)
-function thumbUp(lm){
-  return lm[4].x < lm[3].x;
+function fingerDown(tip, pip, lm){
+  return lm[tip].y > lm[pip].y;
 }
 
-let drawing=false;
+let drawing = false;
 let lastX=null;
 let lastY=null;
 
 // =====================
-// Main Detection Logic
+// Main Logic
 // =====================
 
 hands.onResults(results => {
@@ -49,44 +48,38 @@ hands.onResults(results => {
 
     const lm = results.multiHandLandmarks[0];
 
-    const thumb  = thumbUp(lm);
-    const index  = fingerUp(8,6,lm);
-    const middle = fingerUp(12,10,lm);
-    const ring   = fingerUp(16,14,lm);
-    const pinky  = fingerUp(20,18,lm);
+    const indexUp  = fingerUp(8,6,lm);
+    const middleUp = fingerUp(12,10,lm);
+    const ringUp   = fingerUp(16,14,lm);
+    const pinkyUp  = fingerUp(20,18,lm);
+
+    const indexDown  = fingerDown(8,6,lm);
+    const middleDown = fingerDown(12,10,lm);
+    const ringDown   = fingerDown(16,14,lm);
+    const pinkyDown  = fingerDown(20,18,lm);
 
     // =====================
-    // 🖐 PALM → CLEAR SCREEN
+    // ✊ FIST → CLEAR SCREEN
     // =====================
-    // 🖐 OPEN PALM → CLEAR CANVAS
-if(index && middle && ring && pinky){
-
-    // small delay protection (prevents repeated clearing)
-    if(!window.palmDetected){
+    if(indexDown && middleDown && ringDown && pinkyDown){
         ctx.clearRect(0,0,canvas.width,canvas.height);
         drawing=false;
         lastX=null;
         lastY=null;
-
-        window.palmDetected = true;
+        return;
     }
 
-    return;
-} else {
-    window.palmDetected = false;
-}
-
     // =====================
-    // ☝️ DRAW
+    // ☝️ DRAW MODE
     // =====================
-    if(index && !middle && !ring && !pinky){
+    if(indexUp && !middleUp && !ringUp && !pinkyUp){
         drawing=true;
     }
 
     // =====================
     // ✌️ STOP DRAWING
     // =====================
-    else if(index && middle){
+    else if(indexUp && middleUp){
         drawing=false;
         lastX=null;
         lastY=null;
@@ -130,7 +123,7 @@ if(index && middle && ring && pinky){
 
 const camera = new Camera(video,{
   onFrame: async ()=>{
-    await hands.send({image:video});
+      await hands.send({image:video});
   },
   width:640,
   height:480
