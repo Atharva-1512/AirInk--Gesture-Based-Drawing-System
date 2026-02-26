@@ -59,7 +59,6 @@ hands.onResults(results => {
     const middle = fingerUp(12,10,lm);
     const ring   = fingerUp(16,14,lm);
     const pinky  = fingerUp(20,18,lm);
-    const pinch = pinchGesture(lm);
 
     // =====================
     // 🖐 PALM → CLEAR SCREEN
@@ -97,16 +96,6 @@ if(index && middle && ring && pinky){
         lastX=null;
         lastY=null;
     }
-    if(pinch){
-    const finger = lm[8];
-
-    const x = (1 - finger.x) * canvas.width;
-    const y = finger.y * canvas.height;
-
-    ctx.clearRect(x-25,y-25,50,50);
-    drawing=false;
-    return;
-}
 
     // =====================
     // Drawing Execution
@@ -115,17 +104,8 @@ if(index && middle && ring && pinky){
 
         const finger = lm[8];
 
-        let x = (1 - finger.x) * canvas.width;
-let y = finger.y * canvas.height;
-
-// Smooth movement
-if(smoothX === null){
-    smoothX = x;
-    smoothY = y;
-}
-
-smoothX = smoothX * smoothFactor + x * (1 - smoothFactor);
-smoothY = smoothY * smoothFactor + y * (1 - smoothFactor);
+        const x = (1 - finger.x) * canvas.width;
+        const y = finger.y * canvas.height;
 
         ctx.strokeStyle="cyan";
         ctx.lineWidth=5;
@@ -134,12 +114,12 @@ smoothY = smoothY * smoothFactor + y * (1 - smoothFactor);
         if(lastX!==null && lastY!==null){
             ctx.beginPath();
             ctx.moveTo(lastX,lastY);
-            ctx.lineTo(smoothX,smoothY);
+            ctx.lineTo(x,y);
             ctx.stroke();
         }
 
-        lastX=smoothX;
-        lastY=smoothY;
+        lastX=x;
+        lastY=y;
     }
 
   } else {
@@ -162,10 +142,3 @@ const camera = new Camera(video,{
 });
 
 camera.start();
-
-function pinchGesture(lm){
-    const dx = lm[8].x - lm[4].x;
-    const dy = lm[8].y - lm[4].y;
-    const distance = Math.sqrt(dx*dx + dy*dy);
-    return distance < 0.05;
-}

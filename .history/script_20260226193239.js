@@ -97,16 +97,6 @@ if(index && middle && ring && pinky){
         lastX=null;
         lastY=null;
     }
-    if(pinch){
-    const finger = lm[8];
-
-    const x = (1 - finger.x) * canvas.width;
-    const y = finger.y * canvas.height;
-
-    ctx.clearRect(x-25,y-25,50,50);
-    drawing=false;
-    return;
-}
 
     // =====================
     // Drawing Execution
