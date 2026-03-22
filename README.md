@@ -6,7 +6,7 @@ Instead of touching the screen, users can write or sketch naturally in the air u
 
 ---
 
-🚀 Live Concept
+🚀 Live Thinking and proposal 
 
 «Draw without touching. Write in the air.»
 
