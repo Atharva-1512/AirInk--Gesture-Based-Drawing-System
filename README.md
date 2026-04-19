@@ -61,17 +61,6 @@ CSS| UI Styling
 
 ---
 
-📂 Project Structure
-
-air-ink/
-│
-├── index.html
-├── style.css
-├── script.js
-├── assets/
-└── README.md
-
----
 
 ⚙️ Installation & Setup
 
